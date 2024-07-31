@@ -1,0 +1,10 @@
+src {
+    controllers {}
+    helpers {}
+    index.js </>
+    models {}
+    public {}
+    routes {}
+    server {}
+    views {}
+}
