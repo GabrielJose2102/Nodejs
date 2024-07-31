@@ -1,0 +1,61 @@
+- Morgan: 
+
+Morgan es un middleware de registro (logging) HTTP para aplicaciones Node.js. Se usa principalmente para registrar solicitudes HTTP que llegan al servidor. Esto es útil para depuración, monitoreo y análisis del rendimiento de las aplicaciones web.
+
+Usos de Morgan en Node.js:
+Registro de Solicitudes HTTP: Morgan puede registrar detalles de cada solicitud HTTP, incluyendo el método de la solicitud (GET, POST, etc.), la URL solicitada, el estado de la respuesta y el tiempo que tomó procesar la solicitud.
+
+Depuración: Durante el desarrollo, Morgan puede ayudar a los desarrolladores a entender cómo se están manejando las solicitudes en el servidor y a identificar problemas o cuellos de botella.
+
+Auditoría y Seguridad: Mantener un registro de todas las solicitudes puede ser útil para auditorías y para identificar posibles intentos de ataque o accesos no autorizados.
+
+Monitoreo del Rendimiento: Al registrar el tiempo de respuesta de cada solicitud, Morgan puede ayudar a identificar áreas donde el rendimiento del servidor puede ser mejorado.
+
+Cómo usar Morgan:
+
+Instalación:
+Puedes instalar Morgan usando npm:
+npm install morgan
+
+Configuración:
+Para usar Morgan, debes requerirlo y configurarlo en tu aplicación Express (u otro framework compatible con middleware de Connect):
+
+const express = require('express');
+const morgan = require('morgan');
+const app = express();
+
+// Configurar Morgan para registrar en formato 'combined'
+app.use(morgan('combined'));
+
+// Tu código de rutas y middleware adicionales
+app.get('/', (req, res) => {
+  res.send('Hola, mundo!');
+});
+
+app.listen(3000, () => {
+  console.log('Servidor escuchando en el puerto 3000');
+});
+
+Diferentes Formatos de Registro:
+Morgan ofrece varios formatos de registro predeterminados, como:
+
+combined: Un formato estándar para registros en servidores web que incluye detalles completos de las solicitudes.
+
+common: Similar a combined, pero con menos detalles.
+
+dev: Un formato conciso adecuado para desarrollo.
+
+short: Un formato abreviado con detalles esenciales.
+
+tiny: Un formato minimalista con solo los detalles más importantes.
+
+También puedes definir tus propios formatos de registro personalizados si los predeterminados no se ajustan a tus necesidades.
+
+
+// Usando el formato 'dev'
+app.use(morgan('dev'));
+
+// Definiendo un formato personalizado
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+
+En resumen, Morgan es una herramienta esencial para el registro de solicitudes HTTP en aplicaciones Node.js, proporcionando valiosa información para depuración, monitoreo y análisis de rendimiento.

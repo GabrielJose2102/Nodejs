@@ -1,0 +1,135 @@
+- Multer: 
+
+Multer es un middleware para Node.js que se utiliza para manejar multipart/form-data, que es principalmente usado para subir archivos. Está diseñado para trabajar con Express y otros frameworks basados en Connect.
+
+Usos de Multer en Node.js:
+Subida de Archivos: Multer facilita la subida de archivos desde el cliente al servidor. Permite recibir archivos adjuntos en formularios y almacenarlos en el servidor.
+
+Manejo de Datos en multipart/form-data: Este tipo de datos es utilizado cuando un formulario HTML contiene archivos. Multer se encarga de analizar y procesar estos datos.
+
+Control de Destino y Nombre de los Archivos: Multer permite especificar la ubicación en el sistema de archivos donde se guardarán los archivos subidos, así como sus nombres. Esto puede incluir la organización de archivos en diferentes carpetas y la generación de nombres de archivos únicos.
+
+Cómo usar Multer:
+Instalación:
+Puedes instalar Multer usando npm:
+npm install multer
+
+
+Configuración y Uso:
+Para usar Multer, debes requerirlo y configurarlo en tu aplicación Express:
+
+
+const express = require('express');
+const multer = require('multer');
+const app = express();
+
+// Configurar el almacenamiento de los archivos subidos
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Carpeta donde se guardarán los archivos
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Nombre del archivo
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Rutas para manejar la subida de archivos
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('Archivo subido correctamente');
+});
+
+app.listen(3000, () => {
+  console.log('Servidor escuchando en el puerto 3000');
+});
+
+
+Configuración Avanzada:
+Subir Múltiples Archivos: Puedes configurar Multer para manejar la subida de múltiples archivos en una sola solicitud.
+
+app.post('/upload-multiple', upload.array('files', 12), (req, res) => {
+  res.send('Archivos subidos correctamente');
+});
+
+
+
+
+Filtros de Archivos: Puedes filtrar los archivos según su tipo (MIME type) u otras características.
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true); // Aceptar archivo
+  } else {
+    cb(null, false); // Rechazar archivo
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
+
+
+
+Límites de Tamaño: Puedes establecer límites para el tamaño de los archivos subidos.
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5 // 5 MB
+  }
+});
+
+
+
+Ejemplo Completo:
+
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+
+const app = express();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Añadir extensión original
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5 // 5 MB
+  },
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb('Error: Tipo de archivo no soportado');
+    }
+  }
+});
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (req.file) {
+    res.send('Archivo subido correctamente');
+  } else {
+    res.send('Error al subir el archivo');
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Servidor escuchando en el puerto 3000');
+});
+
+
+En resumen, Multer es una herramienta esencial para el manejo de subida de archivos en aplicaciones Node.js, proporcionando una configuración flexible y un control detallado sobre cómo y dónde se almacenan los archivos.
