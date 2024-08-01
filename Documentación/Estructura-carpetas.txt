@@ -1,10 +1,47 @@
 src {
     controllers {}
     helpers {}
-    index.js </>
     models {}
     public {}
     routes {}
     server {}
     views {}
+    database.js </>
+    index.js </>
+    keys.js </>
+}
+
+
+
+
+
+
+controllers {
+    home.js </>
+    image.js </>
+}
+
+helpers {}
+
+models {}
+
+public {
+    img {}
+    upload {
+        temp {}
+    }
+}
+
+routes {
+    index.js </>
+}
+
+server {
+    config.js </>
+    helpers.js </>
+}
+
+views {
+    layouts {}
+    partials {}
 }
