@@ -3,7 +3,7 @@ const crtl = {};
 
 //función index
 crtl.index = (req, res)=> {
-    res.render('index')
+    res.render('index');
 }
 
 //exportando el objeto con las funciones

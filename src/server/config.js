@@ -21,13 +21,14 @@ module.exports = app => {
     
     // settings
     app.set('port', process.env.PORT || 3000); //estableciendo puerto de arracque
-    app.set('views', path.join(__dirname, 'views')); //configuracion handlebars pasando dirección de la carpeta a nodejs
+    app.set('views', path.join(__dirname, '../views')); //configuracion handlebars pasando dirección de la carpeta a nodejs
+
     app.engine('.hbs', exphbs({
-        defaultLyout: 'main', //sera el archivo principal de hbs
+        defaultLayout: 'main', //sera el archivo principal de hbs
         partialsDir: path.join(app.get('views'), 'partials'), //obteniendo dirección de views sera para crear componentes parciales
         layoutsDir: path.join(app.get('views'), 'layouts'), //para crear plantillas html reutilizables
         extname: '.hbs', //extensión que se usara
-        helpers: require('./helpers.js') //usar funciones dentro de handlebars
+        helpers: require('./helpers') //usar funciones dentro de handlebars
     }));
     app.set('view engine', '.hbs'); //poder ejecutar el motor de plantillas
 

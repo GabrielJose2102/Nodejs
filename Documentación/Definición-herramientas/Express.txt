@@ -1,0 +1,124 @@
+Cada uno de estos métodos ofrece diferentes funcionalidades para configurar, manejar y gestionar tu aplicación Express. Aquí está un breve resumen de su uso:
+
+app.use(): Configura middleware.
+app.get(), app.post(), etc.: Define manejadores para solicitudes HTTP.
+app.all(): Maneja todas las solicitudes para una ruta específica.
+app.engine(): Registra motores de plantillas.
+app.set(): Establece configuraciones de la aplicación.
+app.route(): Crea rutas encadenadas.
+app.param(): Maneja parámetros de ruta.
+app.locals: Define variables globales para vistas.
+app.get('settingName'): Obtiene valores de configuración.
+app.listen(): Inicia el servidor.
+
+Cada uno de estos métodos permite un control fino sobre cómo tu aplicación Express maneja las solicitudes y respuestas, y cómo se configura.
+
+
+
+Métodos Adicionales en Express
+
+1. app.disable():
+Descripción: Desactiva una configuración establecida con app.set().
+Ejemplo:
+app.disable('x-powered-by'); // Desactiva el encabezado 'X-Powered-By'
+
+
+2.app.enable():
+Descripción: Habilita una configuración que había sido desactivada con app.disable().
+Ejemplo:
+app.enable('trust proxy'); // Habilita la confianza en el proxy
+
+
+3.app.listen():
+Descripción: Inicia el servidor en un puerto especificado y opcionalmente proporciona una función de devolución de llamada.
+Ejemplo:
+const server = app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+
+
+4.app.handle():
+Descripción: Internamente utilizado por Express para manejar solicitudes.
+Uso: No se usa comúnmente directamente en aplicaciones, pero es parte del proceso interno de manejo de solicitudes.
+
+
+5.app.mountpath:
+Descripción: Proporciona la ruta en la que se ha montado un Router o un middleware.
+Ejemplo:
+console.log(router.mountpath); // Imprime la ruta en la que está montado el router
+
+
+6.app.request y app.response:
+Descripción: Permiten añadir métodos y propiedades a los objetos req y res globales de Express.
+Ejemplo:
+app.use((req, res, next) => {
+    req.customMethod = () => { /* ... */ };
+    res.customMethod = () => { /* ... */ };
+    next();
+});
+
+
+Propiedades Adicionales en Express
+
+7.app.locals:
+Descripción: Un objeto que se utiliza para definir variables locales globales disponibles para todas las vistas.
+Ejemplo:
+app.locals.siteName = 'My Cool Website';
+
+
+8.app.settings:
+Descripción: Un objeto que contiene todas las configuraciones actuales de la aplicación.
+Ejemplo:
+console.log(app.settings);
+
+
+9.app.engines:
+Descripción: Un objeto que contiene todos los motores de plantillas registrados con app.engine().
+Ejemplo:
+console.log(app.engines);
+
+
+10.app.mountpath:
+Descripción: La ruta base en la que se montó un Router o middleware específico.
+Ejemplo:
+console.log(router.mountpath); // Imprime la ruta base del router
+
+
+
+Métodos en Routers
+Si estás utilizando Router de Express para manejar rutas, también tienes acceso a varios métodos útiles en los objetos Router:
+
+
+11.router.use():
+Descripción: Similar a app.use(), pero se aplica a un Router específico.
+Ejemplo:
+router.use('/api', apiRoutes);
+
+
+12.router.get(), router.post(), etc.:
+Descripción: Define manejadores de rutas en un Router.
+Ejemplo:
+router.get('/items', (req, res) => {
+    res.send('Items');
+});
+
+
+13.router.param():
+Descripción: Define middleware para parámetros de ruta en un Router.
+Ejemplo:
+router.param('itemId', (req, res, next, id) => {
+    req.itemId = id;
+    next();
+});
+
+
+14.router.route():
+Descripción: Permite encadenar métodos para una ruta específica en un Router.
+Ejemplo:
+router.route('/items')
+  .get((req, res) => {
+      res.send('Get Items');
+  })
+  .post((req, res) => {
+      res.send('Create Item');
+  });
