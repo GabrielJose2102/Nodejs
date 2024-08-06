@@ -5,12 +5,12 @@
         </h3>
     </div>
     <div class="card-body">
-        <form action="/images" method="post">
+        <form action="/images" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" name="image" class="custom-file-input" id="inputGroup" aria-describedby="inputGroupFileAddon" required>
-                        <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+                        <label class="custom-file-label" for="inputGroupFile"></label>
                     </div>
                 </div>
             </div>
@@ -25,5 +25,24 @@
                 <button class="btn btn-success"><i class="fa fa-upload"></i> Upload Image</button>
             </div>
         </form>
+    </div>
+</div>
+
+
+<div class="card mt-2">
+    <div class="card-header bg-dark text-white">
+        <h3><i class="far fa-images"></i> Recent Upload</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            {{#each images}}
+                <div class="col-md-4">
+                    <a href="/images/{{uniqueId}}">
+                        <img class="w-100 h-100 img-thumbnail" src="/public/upload/{{filename}}" alt="">
+                    </a>
+                </div>
+            {{/each}}
+        </div>
     </div>
 </div>

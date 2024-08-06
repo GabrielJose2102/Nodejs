@@ -20,7 +20,7 @@ const routes = require('../routes/index.js');
 module.exports = app => {
     
     // settings
-    app.set('port', process.env.PORT || 3000); //estableciendo puerto de arracque
+    app.set('port', process.env.PORT || 3001); //estableciendo puerto de arracque
     app.set('views', path.join(__dirname, '../views')); //configuracion handlebars pasando dirección de la carpeta a nodejs
 
     app.engine('.hbs', exphbs({
@@ -28,7 +28,11 @@ module.exports = app => {
         partialsDir: path.join(app.get('views'), 'partials'), //obteniendo dirección de views sera para crear componentes parciales
         layoutsDir: path.join(app.get('views'), 'layouts'), //para crear plantillas html reutilizables
         extname: '.hbs', //extensión que se usara
-        helpers: require('./helpers') //usar funciones dentro de handlebars
+        helpers: require('./helpers'), //usar funciones dentro de handlebars
+        runtimeOptions: {
+            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
+        }
     }));
     app.set('view engine', '.hbs'); //poder ejecutar el motor de plantillas
 
