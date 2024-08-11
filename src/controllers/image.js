@@ -69,8 +69,15 @@ crtl.create = async (req, res)=> {
 };
 
 //
-crtl.like = (req, res)=> {
-    
+crtl.like = async (req, res)=> {
+    const image = await Image.findOne({filename: {$regex: req.params.image_id}});
+    if (image) {
+        image.likes = image.likes + 1;
+        await image.save();
+        res.json({likes: image.likes});
+    } else {
+        res.status(500).json({error: 'Internal Error'});
+    };
 };
 
 //
