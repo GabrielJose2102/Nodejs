@@ -96,8 +96,15 @@ crtl.comment = async (req, res)=> { //agregar comentarios a la imagen selecciona
 };
 
 //
-crtl.remove = (req, res)=> {
-    
+crtl.remove = async (req, res)=> {
+    const image = await Image.findOne({filename: {$regex: req.params.image_id}});
+
+    if (image) {
+        await fs.unlink(path.resolve('./src/public/upload/' + image.filename));
+        await Comment.deleteOne({image_id: image._id});
+        await image.remove();
+        res.json(true);
+    }
 };
 
 module.exports = crtl; // exportar objeto crtl con las funciones
