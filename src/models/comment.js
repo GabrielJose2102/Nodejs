@@ -11,5 +11,13 @@ const CommentSchema = new Schema({ //instanciamos la clase Schema y le pasamos c
     timestamp: { type: Date, default:Date.now }
 });
 
+CommentSchema.virtual('image')
+    .set(function (image) {
+        this._image = image;
+    })
+    .get(function () {
+        return this._image;
+    });
+
 
 module.exports = model('Comment', CommentSchema); //se exporta el esquema y se usa la función model para convertirlo en un modelo que se puede ejecutar como consulta en la BD

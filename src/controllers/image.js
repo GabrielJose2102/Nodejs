@@ -1,21 +1,23 @@
 //importar path
 const path = require('path');
-// funciones ayudantes
+//funciones ayudantes
 const helpers = require('../helpers/libs.js');
-// maneja los archivos entre carpetas
+//maneja los archivos entre carpetas
 const fs = require('fs-extra');
-//
+//usado para crear el hash para el avatar de gravatar
 const md5 = require('md5');
 
 //importamos los modelos de Schema para la base de datos
 const { Image, Comment } = require('../models'); //son los modelos que se crean en la base de datos (objetos)
+
+const sidebar = require('../helpers/sidebar.js') //
 
 //creando objeto contenedor de las funciones
 const crtl = {};
 
 //función principal donde se inicia la praimera vista de la interfaz image
 crtl.index = async (req, res)=> {
-    const viewModel = { image: {}, comments: {} }; //creación de objeto para almacenar los esquemas
+    let viewModel = { image: {}, comments: {} }; //creación de objeto para almacenar los esquemas
 
     const image = await Image.findOne({filename: {$regex: req.params.image_id}}); //se extrajo desde la interfaz el id de la imagen para consultar ese objeto en especifico en la BD
     
@@ -26,6 +28,8 @@ crtl.index = async (req, res)=> {
 
         const comments = await Comment.find({image_id: image._id}); //consultando los comentarios traer todos los objetos con la info de los comentrios relacionados con este id
         viewModel.comments = comments; //guardando esquema Comment en el viewModel
+
+        viewModel = await sidebar(viewModel);
 
         res.render('image', viewModel); //se renderiza la interfaz de Image, Comment en el viewModel y se le pasa como paremetro el objeto de la imagen relacionada con el id especificado
     } else {
@@ -68,21 +72,21 @@ crtl.create = async (req, res)=> {
     saveImage(); //se ejecuta por primera vez la función
 };
 
-//
-crtl.like = async (req, res)=> {
-    const image = await Image.findOne({filename: {$regex: req.params.image_id}});
-    if (image) {
-        image.likes = image.likes + 1;
-        await image.save();
-        res.json({likes: image.likes});
+//ejecución de controlador del boton de likes
+crtl.like = async (req, res)=> { //funciónes asincronas
+    const image = await Image.findOne({filename: {$regex: req.params.image_id}}); //obteniendo objeto de la imagen del id especificado
+    if (image) { //comprobando si existe la imagen
+        image.likes = image.likes + 1; //aumento de campo like en el objeto
+        await image.save(); //guardando consulta
+        res.json({likes: image.likes}); //ejecutando un json se pasa el campo de like con la cantidad de likes
     } else {
-        res.status(500).json({error: 'Internal Error'});
+        res.status(500).json({error: 'Internal Error'}); //mensaje y estado de error 
     };
 };
 
 //
 crtl.comment = async (req, res)=> { //agregar comentarios a la imagen seleccionada
-    const image = await Image.findOne({filename: {$regex: req.params.image_id}}); //
+    const image = await Image.findOne({filename: {$regex: req.params.image_id}}); //obteniendo objeto de la imagen del id especificado
     if (image) { //comprobar si existe esa imagen
         const newComment = new Comment(req.body); //se pasa el objeto al esquema que se ingresara a la BD
         newComment.gravatar = md5(newComment.email); //Pasando el correo para que genere el hash de gravatar para la imagen del icono
@@ -91,19 +95,19 @@ crtl.comment = async (req, res)=> { //agregar comentarios a la imagen selecciona
         const commentSave = await newComment.save(); //se ejecuta la función para guardar los datos en la BD
         res.redirect('/images/' + image.uniqueId); //redireccionamiento se vuelve a cargar la pagina para agregar el comentrio nuevo
     } else {
-        res.redirect('/');
+        res.redirect('/'); //si hay un error vuelve a la pagina principal
     };
 };
 
-//
-crtl.remove = async (req, res)=> {
-    const image = await Image.findOne({filename: {$regex: req.params.image_id}});
+//controlador de eliminación de imagen
+crtl.remove = async (req, res)=> { //función asincrona
+    const image = await Image.findOne({filename: {$regex: req.params.image_id}}); //obteniendo objeto de la imagen del id especificado
 
-    if (image) {
-        await fs.unlink(path.resolve('./src/public/upload/' + image.filename));
-        await Comment.deleteOne({image_id: image._id});
-        await image.remove();
-        res.json(true);
+    if (image) { //comprobando si existe la imagen
+        await fs.unlink(path.resolve('./src/public/upload/' + image.filename)); //eliminando imagen de la carpeta upload
+        await Comment.deleteOne({image_id: image._id}); //eliminando comentarios de la imagen seleccionada
+        await image.remove(); //eliminando imagen del objeto de la base de datos
+        res.json(true); //ejecutando json
     }
 };
 
