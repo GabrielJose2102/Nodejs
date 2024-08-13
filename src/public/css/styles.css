@@ -5,3 +5,17 @@ body {
 .navbar-brand img {
     width: 60%;
 }
+
+
+/* Most Popular */
+.most-popular {
+    border: solid 1px #ddd;
+    padding: 0.5rem;
+}
+
+/* Lastest Comments */
+.lastest-comments {
+    margin: auto;
+    border-bottom: solid 1px #ddd;
+    padding-bottom: 0.5rem;
+}

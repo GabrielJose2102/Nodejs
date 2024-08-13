@@ -57,5 +57,5 @@ module.exports = app => {
     }
     
 
-    return app;
+    return app; //retornando objeto app con las funciones creadas
 }

@@ -1,41 +1,41 @@
-const { Comment, Image } = require('../models');
+const { Comment, Image } = require('../models'); //trayendo modelos de la BD
 
-async function imagesCounter() {
+async function imagesCounter() {  //contador de imagenes
     return await Image.countDocuments();
 }
 
-async function commentsCounter() {
+async function commentsCounter() { //contador de comentarios
     return await Comment.countDocuments();
 }
 
-async function imageTotalViewsCounter() {
-    const result = await Image.aggregate([{$group: {
+async function imageTotalViewsCounter() { //contador de views
+    const result = await Image.aggregate([{$group: { //grupos de views
         _id: '1',
-        viewsTotal: { $sum: '$views' }
+        viewsTotal: { $sum: '$views' } //sumando todos los views
     }}]);
 
-    return result[0].viewsTotal;
+    return result[0].viewsTotal; //retornando total
 }
 
-async function likesTotalCounter() {
-    const result = await Image.aggregate([{$group: {
+async function likesTotalCounter() { //contador de likes
+    const result = await Image.aggregate([{$group: { //grupos de likes
         _id: '1',
-        likesTotal: { $sum: '$likes' }
+        likesTotal: { $sum: '$likes' } //sumando todos los likes
     }}]);
 
-    return result[0].likesTotal;
+    return result[0].likesTotal; //retornando total
 }
 
-module.exports = async ()=> {
+module.exports = async ()=> { //exportando función
     
-    const result = await Promise.all([
+    const result = await Promise.all([ //agrupando las funciones para hacerlas asincronas a todas a la vez
         imagesCounter(),
         commentsCounter(),
         imageTotalViewsCounter(),
         likesTotalCounter()
     ]);
 
-    return {
+    return { //retornando objeto con los datos
         images: result[0],
         comments: result[1],
         views: result[2],

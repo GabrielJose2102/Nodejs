@@ -11,11 +11,11 @@ const CommentSchema = new Schema({ //instanciamos la clase Schema y le pasamos c
     timestamp: { type: Date, default:Date.now }
 });
 
-CommentSchema.virtual('image')
-    .set(function (image) {
+CommentSchema.virtual('image') //creando campo virtual en el Schema de comentarios para almacenar y consultar la imagen relacionada
+    .set(function (image) { //almacenar
         this._image = image;
     })
-    .get(function () {
+    .get(function () { //consultar
         return this._image;
     });
 

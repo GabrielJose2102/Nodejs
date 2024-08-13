@@ -10,7 +10,7 @@ const md5 = require('md5');
 //importamos los modelos de Schema para la base de datos
 const { Image, Comment } = require('../models'); //son los modelos que se crean en la base de datos (objetos)
 
-const sidebar = require('../helpers/sidebar.js') //
+const sidebar = require('../helpers/sidebar.js') //helper para traer consultas a la BD
 
 //creando objeto contenedor de las funciones
 const crtl = {};
@@ -29,7 +29,7 @@ crtl.index = async (req, res)=> {
         const comments = await Comment.find({image_id: image._id}); //consultando los comentarios traer todos los objetos con la info de los comentrios relacionados con este id
         viewModel.comments = comments; //guardando esquema Comment en el viewModel
 
-        viewModel = await sidebar(viewModel);
+        viewModel = await sidebar(viewModel); //enviando el viewModel al sidebar para que se agreguen los demas datos
 
         res.render('image', viewModel); //se renderiza la interfaz de Image, Comment en el viewModel y se le pasa como paremetro el objeto de la imagen relacionada con el id especificado
     } else {
@@ -40,7 +40,7 @@ crtl.index = async (req, res)=> {
 //función para subir una imgen al servidor
 crtl.create = async (req, res)=> {
 
-    const saveImage = async ()=> {
+    const saveImage = async ()=> { //función recursiva 
         const imgUrl = helpers.randomNumber(); // llamdo funcion que genera nombre de 6 caracteres random para la imagen
         const images = await Image.find({filename: imgUrl}); //se busca el objeto que se esta creando para saber si esta en la BD
 

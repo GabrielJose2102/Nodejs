@@ -2,7 +2,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h2>{{image.title}}</h2>
         <button class="btn btn-danger" id="btn-delete" data-id="{{image.uniqueId}}">
-            <i class="fa fa-times"></i> Delete
+            <i class="fa fa-times"></i> Eliminar 
         </button>
     </div>
 
@@ -15,7 +15,7 @@
 
     <div class="card-footer d-flex justify-content-between align-items-center">
         <button class="btn btn-success" id="btn-like" data-id="{{image.filename}}">
-            <i class="fas fa-thumbs-up"></i> Like
+            <i class="fas fa-thumbs-up"></i> Me gusta
         </button>
         <p>
             <span class="likes-count">{{image.likes}}</span>
@@ -32,26 +32,26 @@
 
 <div class="card mt-2">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h3>Comments</h3>
+        <h3>Comentarios</h3>
         <button class="btn btn-info" id="btn-toggle-comment">
-            <i class="fa fa-comment-o"></i> Post a Comments
+            <i class="fa fa-comment-o"></i> Formulario comentarios
         </button>
     </div>
     <div class="card-body">
         <blockquote id="post-comment">
             <form action="/images/{{image.uniqueId}}/comment" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="name" placeholder="Name">
+                    <input type="text" class="form-control" name="name" placeholder="Nombre">
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control" name="email" placeholder="Email">
+                    <input type="email" class="form-control" name="email" placeholder="Correo">
                 </div>
                 <div class="form-group">
-                    <textarea name="comment" rows="2" class="form-control" placeholder="Comment"></textarea>
+                    <textarea name="comment" rows="2" class="form-control" placeholder="Comenta"></textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-success" id="btn-comment">
-                        <i class="fa fa-comment"></i> Post
+                        <i class="fa fa-comment"></i> Publicar
                     </button>
                 </div>
             </form>
